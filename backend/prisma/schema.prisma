@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+  CLIENT
+  TECHNICIAN
+}
+
+model User {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  password    String
+  name        String
+  phone       String?
+  role        Role     @default(CLIENT)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  ordersAsClient     Order[] @relation("ClientOrders")
+  ordersAsTechnician Order[] @relation("TechnicianOrders")
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  services    Service[]
+}
+
+model Service {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  basePrice   Float
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  
+  // JSON field to store multipliers and rules e.g., {"sizes": {"P": 1, "M": 1.5, "G": 2}}
+  pricingRules Json?    
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  orders      Order[]
+}
+
+enum OrderStatus {
+  PENDING
+  SCHEDULED
+  EN_ROUTE
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model Order {
+  id            String      @id @default(uuid())
+  clientId      String
+  client        User        @relation("ClientOrders", fields: [clientId], references: [id])
+  technicianId  String?
+  technician    User?       @relation("TechnicianOrders", fields: [technicianId], references: [id])
+  
+  serviceId     String
+  service       Service     @relation(fields: [serviceId], references: [id])
+  
+  scheduledDate DateTime
+  address       String
+  cep           String
+  
+  totalPrice    Float
+  status        OrderStatus @default(PENDING)
+  
+  paymentMethod String? // e.g., PIX, CREDIT_CARD
+  paymentStatus String? // e.g., PENDING, PAID, FAILED
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
