@@ -14,7 +14,8 @@ import {
   ArrowRight, 
   ArrowLeft,
   Wand2,
-  AlertCircle
+  AlertCircle,
+  Sparkles
 } from 'lucide-react';
 
 const steps = [
