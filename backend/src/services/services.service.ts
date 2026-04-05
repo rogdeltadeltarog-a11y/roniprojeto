@@ -31,7 +31,7 @@ export class ServicesService {
     let total = basePrice;
     
     // Supondo multipliers no schema JSON ou regras fixas
-    const multipliers = { 'P': 1.0, 'M': 1.5, 'G': 2.0, 'GG': 2.5 };
+    const multipliers: Record<string, number> = { 'P': 1.0, 'M': 1.5, 'G': 2.0, 'GG': 2.5 };
     total *= multipliers[size] || 1.0;
 
     return total;
