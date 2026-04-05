@@ -5,8 +5,9 @@ import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
 import { CheckCircle, Copy, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
-export default function SuccessPage() {
+function SuccessContent() {
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
 
@@ -60,5 +61,17 @@ export default function SuccessPage() {
         </div>
       </Container>
     </div>
+  );
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <SuccessContent />
+    </Suspense>
   );
 }
