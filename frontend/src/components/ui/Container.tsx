@@ -11,8 +11,8 @@ interface ContainerProps {
 export default function Container({ children, className = '', animate = true }: ContainerProps) {
   return (
     <motion.div
-      initial={animate ? { opacity: 0, y: 20 } : false}
-      whileInView={animate ? { opacity: 1, y: 0 } : false}
+      initial={animate ? { opacity: 0, y: 20 } : undefined}
+      whileInView={animate ? { opacity: 1, y: 0 } : undefined}
       viewport={{ once: true }}
       className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${className}`}
     >
