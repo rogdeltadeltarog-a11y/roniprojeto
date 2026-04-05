@@ -22,6 +22,9 @@ export default function Button({
   children,
   ...props
 }: ButtonProps) {
+  // Destructure out potentially conflicting handlers from Framer Motion
+  const { onDrag, onDragStart, onDragEnd, onPointerDown, ...buttonProps } = props;
+
   const variants = {
     primary: 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-500/20',
     secondary: 'bg-green-600 text-white hover:bg-green-700 shadow-lg shadow-green-500/20',
@@ -45,8 +48,8 @@ export default function Button({
         sizes[size],
         className
       )}
-      disabled={isLoading || props.disabled}
-      {...props}
+      disabled={isLoading || buttonProps.disabled}
+      {...(buttonProps as any)}
     >
       {isLoading ? (
         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
